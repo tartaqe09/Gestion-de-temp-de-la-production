@@ -1,0 +1,17 @@
+select  operateur.MAT_OP,NOM,PRENOM,date.MOIS,date.ANNEE,section.DESG_SECT,
+ROUND(sum(T_AN),2) as 'TA H/N',Round(sum(T_AS),2) as 'TA H/S',round(sum(T_PN),2) as 'TP H/N',round(sum(T_PS),2) as 'TP H/S',
+round(sum(T_AN)+sum(T_AS),2) AS 'Total TA',Round(sum(T_PN)+sum(T_PS),2) as 'Total TP'      
+,round(sum(T_PM),2) as 'PM',round(sum(T_PE),2) as 'PE',round(sum(T_S_CH),2) as 'SCH',round(sum(T_MAN),2) as 'MAN',
+round(sum(T_NET),2) as 'NET',round(sum(T_RET),2) as 'RET',
+round(sum(T_ABS),2) as 'ABS',round(sum(T_CL),2) as 'CL',round(sum(T_D),2) as 'D',
+round(sum(T_D)+sum(T_CL)+sum(T_ABS)+sum(T_RET)+sum(T_NET)+sum(T_MAN)+sum(T_S_CH)+sum(T_PE)+sum(T_PM)+sum(T_PN),2) as 'HD'
+
+from Fiche_mens,Contient,ORDF,section,travailler,operateur,produit,date
+where Contient.CODE_OF=ORDF.CODE_OF and Fiche_mens.CODE_FICHE=Contient.CODE_FICHE
+and travailler.CODE_SECT=section.CODE_SECT and travailler.MAT_OP=operateur.MAT_OP
+and operateur.MAT_OP=Fiche_mens.MAT_OP and Fiche_mens.code_date=date.code
+and travailler.CODE_DATE=date.code 
+and produit.CODE_PROD=ORDF.CODE_PROD
+and date.MOIS=:M and date.ANNEE=:A
+group by  operateur.MAT_OP,NOM,PRENOM,date.MOIS,date.ANNEE,section.DESG_SECT
+
